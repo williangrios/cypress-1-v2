@@ -15,16 +15,16 @@ describe("Central de atendimento ao cliente", function () {
     cy.get('#lastName').type(' goncalves rios');
     cy.get('#email').type('williangrios@yahoo.com.br');
     cy.get('#open-text-area').type('observações gerais');
-    cy.get('button[type="submit"]').click();
+    cy.contains('button', 'Enviar').click();
     cy.get('.success').should('be.visible');
   })
 
   it ('Exibe mensagem de erro ao submeter o form com um email com formatação inválida', function(){
     cy.get('#firstName').type('willian ', {delay:0});
     cy.get('#lastName').type(' goncalves rios');
-    cy.get('#email').type('williangrios@yahoo.com.br');
+    cy.get('#email').type('williangrios@yahoo,com.br');
     cy.get('#open-text-area').type('observações gerais');
-    cy.get('button[type="submit"]').click();
+    cy.contains('button', 'Enviar').click();
     cy.get('.error').should('be.visible');
   })
 
@@ -39,7 +39,7 @@ describe("Central de atendimento ao cliente", function () {
     cy.get('#email').type('williangrios@yahoo.com.br');
     cy.get('#open-text-area').type('observações gerais');
 
-    cy.get('button[type="submit"]').click();
+    cy.contains('button', 'Enviar').click();
     cy.get('.error').should('be.visible');
   })
 
@@ -50,17 +50,25 @@ describe("Central de atendimento ao cliente", function () {
   })
 
   it('Não permite enviar sem preencher os campos', function(){
-    cy.get('button[type="submit"]').click();
+    cy.contains('button', 'Enviar').click();
     cy.get('.error').should('be.visible');
   })
 
   it('Não permite enviar sem preencher os campos', function(){
-    cy.get('button[type="submit"]').click();
+    cy.contains('button', 'Enviar').click();
     cy.get('.error').should('be.visible');
   })
 
-  it.only('Envia form usando comando customizado', function() {
+  it('Envia form usando comando customizado', function() {
     cy.fillMandatoryFieldsAndSubmit();
+  })
+
+  it ('Seleciona produto youtube', function(){
+    cy.get('#product').select('YouTube').should('have.value', 'youtube');
+  })
+
+  it.only('Seleciona opção Mentoria mas agora por seu valor', function(){
+    cy.get('#product').select('mentoria').should('have.value', 'mentoria');
   })
 
 });

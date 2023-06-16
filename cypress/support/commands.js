@@ -3,5 +3,5 @@ Cypress.Commands.add('fillMandatoryFieldsAndSubmit', function (){
     cy.get('#lastName').type(' goncalves rios');
     cy.get('#email').type('williangrios@yahoo.com.br');
     cy.get('#open-text-area').type('observações gerais', {delay:200});
-    cy.get('button[type="submit"]').click();
+    cy.contains('button', 'Enviar').click();
 })

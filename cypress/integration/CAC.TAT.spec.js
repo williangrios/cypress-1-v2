@@ -35,7 +35,7 @@ describe("Central de atendimento ao cliente", function () {
   it('Exige que o telefone seja preenchido caso checkbox esteja marcado', function(){
     cy.get('#firstName').type('willian ', {delay:0});
     cy.get('#lastName').type(' goncalves rios');
-    cy.get('#phone-checkbox').click()
+    cy.get('#phone-checkbox').check()
     cy.get('#email').type('williangrios@yahoo.com.br');
     cy.get('#open-text-area').type('observações gerais');
 
@@ -63,12 +63,37 @@ describe("Central de atendimento ao cliente", function () {
     cy.fillMandatoryFieldsAndSubmit();
   })
 
-  it ('Seleciona produto youtube', function(){
+  it ('Seleciona produto youtube pelo rótulo/texto', function(){
     cy.get('#product').select('YouTube').should('have.value', 'youtube');
   })
 
-  it.only('Seleciona opção Mentoria mas agora por seu valor', function(){
+  it('Seleciona opção Mentoria mas agora por seu valor', function(){
     cy.get('#product').select('mentoria').should('have.value', 'mentoria');
+  })
+
+  it ('Selecionando o Blog pelo indice', function (){
+    cy.get('#product').select(1).should('have.value', 'blog');
+  })
+
+  it ('Marca o tipo de atendimento feedback', function (){
+    cy.get('input[type="radio"][value="feedback"]').check().should('have.value', 'feedback')
+  })
+
+  it('Marca cada um dos tipos de atendimento', function() {
+    cy.get('input[type="radio"]') //conferindo se selecionei o radiobutton que tem apenas 3 opções
+      .should('have.length', 3)
+      .each(function ($radio){ //o each recebe uma função de callback que pega cada um dos elementos do array
+        cy.wrap($radio).check() //marco cada um dos elementos (um por vez)
+        cy.wrap($radio).should('be.checked') //checo se está marcado
+      })
+  })
+
+  it.only('Marca ambos os checkboxes e depois desmarca o ultimo', function (){
+    cy.get('input[type="checkbox"]').check() //aqui vai marcar todos os checkboxes
+      .should('be.checked') //verificando se todos estao marcados
+      .last() //aqui vai pegar o ultimo
+      .uncheck() //desmarcando apenas o ultimo
+      .should('not.be.checked') //conferindo se não está checado
   })
 
 });

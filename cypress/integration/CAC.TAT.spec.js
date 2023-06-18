@@ -88,12 +88,39 @@ describe("Central de atendimento ao cliente", function () {
       })
   })
 
-  it.only('Marca ambos os checkboxes e depois desmarca o ultimo', function (){
+  it('Marca ambos os checkboxes e depois desmarca o ultimo', function (){
     cy.get('input[type="checkbox"]').check() //aqui vai marcar todos os checkboxes
       .should('be.checked') //verificando se todos estao marcados
       .last() //aqui vai pegar o ultimo
       .uncheck() //desmarcando apenas o ultimo
       .should('not.be.checked') //conferindo se não está checado
+  })
+
+  it('seleciona arquivo da pasta fixture', function(){
+    cy.get('input[type="file"]#file-upload')
+    .should('not.have.value')
+    .selectFile('./cypress/fixtures/example.json') //aqui o caminho relativo é sempre considerando o arquivo cypress.json
+    .should(function($input){
+      expect($input[0].files[0].name).to.equal('example.json')
+    })
+  })
+
+  it('seleciona arquivo simulando drag and drop', function(){
+    cy.get('input[type="file"]#file-upload')
+    .should('not.have.value')
+    .selectFile('./cypress/fixtures/example.json', {action: 'drag-drop'}) 
+    .should(function($input){
+      expect($input[0].files[0].name).to.equal('example.json')
+    })
+  })
+
+  it.only('seleciona arquivo para a qual foi dado um alias', function(){
+    cy.fixture('example.json').as('sampleFile')
+    cy.get('#file-upload')
+    .selectFile('@sampleFile') 
+    .should(function($input){
+      expect($input[0].files[0].name).to.equal('example.json')
+    })
   })
 
 });

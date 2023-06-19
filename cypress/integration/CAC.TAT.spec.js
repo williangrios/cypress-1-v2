@@ -114,7 +114,7 @@ describe("Central de atendimento ao cliente", function () {
     })
   })
 
-  it.only('seleciona arquivo para a qual foi dado um alias', function(){
+  it('seleciona arquivo para a qual foi dado um alias', function(){
     cy.fixture('example.json').as('sampleFile')
     cy.get('#file-upload')
     .selectFile('@sampleFile') 
@@ -122,5 +122,16 @@ describe("Central de atendimento ao cliente", function () {
       expect($input[0].files[0].name).to.equal('example.json')
     })
   })
+
+  it('Verifica que a politica de privacidade abra em outra aba sem necessidade de um clique', function(){
+    cy.get('#privacy a').should('have.attr', 'target', '_blank')
+  })
+
+  it('Acessa a página de política de privacidade removendo o target e então clicando no link', function(){
+    cy.get('#privacy a').invoke('removeAttr', 'target').click()
+    cy.contains('Talking About Testing').should('be.visible')
+  })
+
+  
 
 });

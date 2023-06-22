@@ -11,7 +11,7 @@ document.querySelector('#phone-checkbox')
       isPhoneRequired = !isPhoneRequired
     } else {
       phoneLabelSpan.style.display = 'none'
-      phoneField.required = !isPhoneRequired
+      phoneField.required = !isPhoneRequired 
       isPhoneRequired = !isPhoneRequired
     }
   })

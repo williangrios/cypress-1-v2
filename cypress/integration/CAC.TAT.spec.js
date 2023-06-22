@@ -64,7 +64,7 @@ describe("Central de atendimento ao cliente", function () {
   })
 
   it ('Seleciona produto youtube pelo rótulo/texto', function(){
-    cy.get('#product').select('YouTube').should('have.value', 'youtube');
+    cy.get('#product').select('YouTube').should('have.value', 'youtubed');
   })
 
   it('Seleciona opção Mentoria mas agora por seu valor', function(){

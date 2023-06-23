@@ -10,13 +10,19 @@ describe("Central de atendimento ao cliente", function () {
     cy.title().should("be.equal", "Central de Atendimento ao Cliente TAT");
   });
 
+  const TIME_4_SECONDS = 4000;
   it('Preenche os campos obrigatórios e envia o formulário', function() {
+    //congelando o relogio do navegador
+    cy.clock()
     cy.get('#firstName').type('willian ', {delay:0});
     cy.get('#lastName').type(' goncalves rios');
     cy.get('#email').type('williangrios@yahoo.com.br');
     cy.get('#open-text-area').type('observações gerais');
     cy.contains('button', 'Enviar').click();
     cy.get('.success').should('be.visible');
+    //avançando 4 segundos
+    cy.tick(TIME_4_SECONDS)
+    cy.get('.success').should('not.be.visible');
   })
 
   it ('Exibe mensagem de erro ao submeter o form com um email com formatação inválida', function(){
@@ -132,6 +138,38 @@ describe("Central de atendimento ao cliente", function () {
     cy.contains('Talking About Testing').should('be.visible')
   })
 
-  
+  it('Exibe e esconde as mensagens de sucesso e erro usando o invoke', function (){
+    cy.get('.success')
+      .should('not.be.visible')
+      .invoke('show')
+      .should('be.visible')
+      .and('contain', "Mensagem enviada com sucesso.")
+      .invoke('hide')
+      .should('not.be.visible')
+  })
+
+  it ('preenche campo de texto usando o invoke', function () {
+    const longText = Cypress._.repeat( '0123456789', 200)
+    cy.get('#open-text-area')
+    .invoke('val', longText)
+    .should('have.value', longText)
+  })
+
+  it('faz uma requisição http', function (){
+    cy.request('https://cac-tat.s3.eu-central-1.amazonaws.com/index.html')
+      .should(function(response) {
+        const {status, statusText, body} = response;
+        expect(status).to.equal(200)
+        expect(statusText).to.equal('OK')
+        expect(body).to.include('CAC TAT')
+      })
+  })
+
+  it.only('encontra o gato escondido', function (){
+    cy.get('#cat')
+      .should('not.be.visible')
+      .invoke('show')
+      .should('be.visible')
+  })
 
 });
